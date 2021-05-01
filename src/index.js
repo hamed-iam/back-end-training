@@ -1,9 +1,16 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const mongoose = require('mongoose');
 const morgan = require('morgan');
 const { notFound, errorHandler } = require('./middleware');
 require('dotenv').config();
+const logs = require('./api/logs.js');
+
+mongoose.connect(process.env.DATABASE_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 const app = express();
 app.use(cors({ origin: process.env.CORS_ORIGIN }));
@@ -16,6 +23,8 @@ app.get('/', (req, res) => {
     message: 'HELLLOOO THEREE FROM HAMED !',
   });
 });
+
+app.use('/api/logs', logs);
 
 app.use(notFound);
 
